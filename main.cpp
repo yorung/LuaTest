@@ -4,6 +4,8 @@ extern "C" {
 #include <lualib.h>
 }
 
+#include <crtdbg.h>
+
 static lua_State *L;
 
 static int Printer(lua_State *L)
@@ -29,5 +31,7 @@ int main(int argc, char* argv[])
 		printf("error! stack is not empty\n");
 	}
 	lua_close(L);
+	//new int;
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
