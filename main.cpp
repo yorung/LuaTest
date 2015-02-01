@@ -5,6 +5,8 @@ extern "C" {
 }
 
 #include <crtdbg.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 static lua_State *L;
 
@@ -16,9 +18,28 @@ static int Printer(lua_State *L)
 	return 0;
 }
 
+static int CreateObject(lua_State *L)
+{
+	int top = lua_gettop(L);
+	printf("CreateObject: top=%d\n", top);
+	int32_t* val = (int32_t*)lua_newuserdata(L, 4);
+	*val = rand();
+	return 1;
+}
+
+static int CreatePrinter(lua_State *L)
+{
+	int top = lua_gettop(L);
+	printf("CreatePrinter: top=%d\n", top);
+	lua_pushcfunction(L, Printer);
+	return 1;
+}
+
 static void Bind()
 {
-	lua_register(L, "Printer", Printer);
+//	lua_register(L, "Printer", Printer);
+	lua_register(L, "CreateObject", CreateObject);
+	lua_register(L, "CreatePrinter", CreatePrinter);
 }
 
 int main(int argc, char* argv[])

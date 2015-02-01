@@ -1,3 +1,5 @@
-Printer()
-Printer("message from lua")
-Printer(1234)
+local obj = CreateObject()
+local pri = CreatePrinter()
+pri()
+pri("message from lua")
+pri(1234)
