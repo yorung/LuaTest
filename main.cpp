@@ -10,7 +10,9 @@ static lua_State *L;
 
 static int Printer(lua_State *L)
 {
-	printf("test\n");
+	int top = lua_gettop(L);
+	const char* name = lua_tostring(L, 1);
+	printf("Printer: top=%d message=%s\n", top, name);
 	return 0;
 }
 
