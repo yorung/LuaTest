@@ -140,6 +140,9 @@
     <ClInclude Include="lua-5.3.0\src\lvm.h" />
     <ClInclude Include="lua-5.3.0\src\lzio.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="main.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

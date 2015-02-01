@@ -22,8 +22,8 @@ int main(int argc, char* argv[])
 	L = luaL_newstate();
 	luaL_openlibs(L);
 	Bind();
-	luaL_dostring(L, "Printer()");
-
+//	luaL_dostring(L, "Printer()");
+	luaL_dofile(L, "main.lua");
 	int top = lua_gettop(L);
 	if (top > 0) {
 		printf("error! stack is not empty\n");

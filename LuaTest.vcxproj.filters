@@ -181,4 +181,7 @@
       <Filter>lua</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="main.lua" />
+  </ItemGroup>
 </Project>
