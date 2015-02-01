@@ -1,0 +1,13 @@
+Debug/
+Release/
+ScreenShot/
+
+lua-5.3.0
+lua-5.3.0.tar.gz
+
+*.suo
+*.user
+*.sdf
+*.opensdf
+*.ipch
+*.bak
