@@ -7,8 +7,34 @@ extern "C" {
 #include <crtdbg.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <assert.h>
 
 static lua_State *L;
+
+class MyClass
+{
+	int dummy;
+};
+
+const char* myClassName = "MyClass";
+
+static void _dumpStack(const char* func, int line)
+{
+	int top = lua_gettop(L);
+	printf("(%s,%d) top=%d\n", func, line, top);
+	for (int i = 0; i < top; i++) {
+		int positive = top - i;
+		int negative = -(i + 1);
+		int type = lua_type(L, positive);
+		int typeN = lua_type(L, negative);
+		assert(type == typeN);
+		const char* typeName = lua_typename(L, type);
+		const char* value = lua_tostring(L, positive);
+		const char* valueN = lua_tostring(L, negative);
+		printf("%d/%d: type=%s value=%s\n", positive, negative, typeName, value);
+	}
+}
+#define DumpStack() _dumpStack(__FUNCTION__, __LINE__)
 
 static int Printer(lua_State *L)
 {
@@ -21,9 +47,15 @@ static int Printer(lua_State *L)
 static int CreateObject(lua_State *L)
 {
 	int top = lua_gettop(L);
-	printf("CreateObject: top=%d\n", top);
-	int32_t* val = (int32_t*)lua_newuserdata(L, 4);
-	*val = rand();
+	DumpStack();
+	MyClass** pp = (MyClass**)lua_newuserdata(L, sizeof(MyClass*));
+	DumpStack();
+	*pp = new MyClass;
+//	luaL_setmetatable(L, myClassName);
+	luaL_getmetatable(L, myClassName);
+	DumpStack();
+	lua_setmetatable(L, -2);
+	DumpStack();
 	return 1;
 }
 
@@ -37,6 +69,16 @@ static int CreatePrinter(lua_State *L)
 
 static void Bind()
 {
+	int r = luaL_newmetatable(L, myClassName);
+	assert(r);
+	DumpStack();
+
+	lua_pushstring(L, myClassName);
+	DumpStack();
+	lua_settable(L, LUA_REGISTRYINDEX);
+	DumpStack();
+
+
 //	lua_register(L, "Printer", Printer);
 	lua_register(L, "CreateObject", CreateObject);
 	lua_register(L, "CreatePrinter", CreatePrinter);
@@ -48,7 +90,10 @@ int main(int argc, char* argv[])
 	luaL_openlibs(L);
 	Bind();
 //	luaL_dostring(L, "Printer()");
-	luaL_dofile(L, "main.lua");
+	if (luaL_dofile(L, "main.lua")) {
+		printf("%s\n", lua_tostring(L, -1));
+		lua_pop(L, 1);
+	}
 	int top = lua_gettop(L);
 	if (top > 0) {
 		printf("error! stack is not empty\n");
