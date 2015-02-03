@@ -54,6 +54,15 @@ static int SetValueObject(lua_State *L)
 	return 0;
 }
 
+static int NewindexObject(lua_State *L)
+{
+	DumpStack();
+	MyClass** pp = (MyClass**)luaL_checkudata(L, -3, myClassName);
+	const char* key = lua_tostring(L, -2);
+	const char* val = lua_tostring(L, -1);
+	return 0;
+}
+
 static int IndexObject(lua_State *L)
 {
 	DumpStack();
@@ -119,6 +128,12 @@ static void Bind()
 
 	lua_pushstring(L, "__index");
 	lua_pushcfunction(L, IndexObject);
+	DumpStack();
+	lua_settable(L, -3);
+	DumpStack();
+
+	lua_pushstring(L, "__newindex");
+	lua_pushcfunction(L, NewindexObject);
 	DumpStack();
 	lua_settable(L, -3);
 	DumpStack();
