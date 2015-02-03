@@ -54,6 +54,12 @@ static int SetValueObject(lua_State *L)
 	return 0;
 }
 
+static int TestMethodObject(lua_State *L)
+{
+	DumpStack();
+	return 0;
+}
+
 static int NewindexObject(lua_State *L)
 {
 	DumpStack();
@@ -114,10 +120,16 @@ static void Bind()
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
 	DumpStack();
-	lua_pushvalue(L, -1);
-	lua_pushstring(L, myClassName);
+//	lua_pushvalue(L, -1);
+//	lua_pushstring(L, myClassName);
+//	DumpStack();
+//	lua_settable(L, LUA_REGISTRYINDEX);
+//	DumpStack();
+
+	lua_pushstring(L, "__index");
+	lua_pushvalue(L, 1);
 	DumpStack();
-	lua_settable(L, LUA_REGISTRYINDEX);
+	lua_settable(L, -3);
 	DumpStack();
 
 	lua_pushstring(L, "__gc");
@@ -126,14 +138,20 @@ static void Bind()
 	lua_settable(L, -3);
 	DumpStack();
 
-	lua_pushstring(L, "__index");
-	lua_pushcfunction(L, IndexObject);
+//	lua_pushstring(L, "__index");
+//	lua_pushcfunction(L, IndexObject);
+//	DumpStack();
+//	lua_settable(L, -3);
+//	DumpStack();
+
+	lua_pushstring(L, "__newindex");
+	lua_pushcfunction(L, NewindexObject);
 	DumpStack();
 	lua_settable(L, -3);
 	DumpStack();
 
-	lua_pushstring(L, "__newindex");
-	lua_pushcfunction(L, NewindexObject);
+	lua_pushstring(L, "TestMethod");
+	lua_pushcfunction(L, TestMethodObject);
 	DumpStack();
 	lua_settable(L, -3);
 	DumpStack();

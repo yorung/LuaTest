@@ -4,16 +4,12 @@ pri()
 pri("message from lua")
 pri(1234)
 
-print("value ob abc:", obj.abc)
-obj:SetValue(567)
-print("value ob abc:", obj.abc)
-
-obj.def = "my string"
-
+print("---------------obj's metatable")
 local m = getmetatable(obj)
 for k,v in pairs(m) do
 	print(k, v)
 end
+print("---------------_G")
 
 storedItIntoGlobal = "stored string in global"
 
@@ -27,3 +23,13 @@ end
 
 print("there are "..tostring(cnt).." global variables" )
 print("length of _G: "..tostring(#_G))
+
+
+print("---------------methods")
+obj:TestMethod()
+
+--print("value ob abc:", obj.abc)
+--obj:SetValue(567)
+--print("value ob abc:", obj.abc)
+
+obj.def = "my string"
