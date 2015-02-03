@@ -44,9 +44,17 @@ static int Printer(lua_State *L)
 	return 0;
 }
 
+static int DestroyObject(lua_State *L)
+{
+	DumpStack();
+	MyClass** pp = (MyClass**)luaL_checkudata(L, -1, myClassName);
+	delete *pp;
+	DumpStack();
+	return 0;
+}
+
 static int CreateObject(lua_State *L)
 {
-	int top = lua_gettop(L);
 	DumpStack();
 	MyClass** pp = (MyClass**)lua_newuserdata(L, sizeof(MyClass*));
 	DumpStack();
@@ -78,6 +86,14 @@ static void Bind()
 	lua_settable(L, LUA_REGISTRYINDEX);
 	DumpStack();
 
+	luaL_getmetatable(L, myClassName);
+	DumpStack();
+	lua_pushstring(L, "__gc");
+	lua_pushcfunction(L, DestroyObject);
+	DumpStack();
+	lua_settable(L, -3);
+	DumpStack();
+	lua_pop(L, 1);
 
 //	lua_register(L, "Printer", Printer);
 	lua_register(L, "CreateObject", CreateObject);
