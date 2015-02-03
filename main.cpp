@@ -50,7 +50,7 @@ static int SetValueObject(lua_State *L)
 {
 	DumpStack();
 	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
-	(*pp)->dummy = lua_tointeger(L, -1);
+	(*pp)->dummy = (int)lua_tointeger(L, -1);
 	return 0;
 }
 
