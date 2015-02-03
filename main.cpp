@@ -80,14 +80,12 @@ static void Bind()
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
 	DumpStack();
-
+	lua_pushvalue(L, -1);
 	lua_pushstring(L, myClassName);
 	DumpStack();
 	lua_settable(L, LUA_REGISTRYINDEX);
 	DumpStack();
 
-	luaL_getmetatable(L, myClassName);
-	DumpStack();
 	lua_pushstring(L, "__gc");
 	lua_pushcfunction(L, DestroyObject);
 	DumpStack();
