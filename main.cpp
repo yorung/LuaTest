@@ -8,11 +8,13 @@ extern "C" {
 #include <stdlib.h>
 #include <stdint.h>
 #include <assert.h>
+#include <string.h>
 
 static lua_State *L;
 
 class MyClass
 {
+public:
 	int dummy;
 };
 
@@ -44,6 +46,28 @@ static int Printer(lua_State *L)
 	return 0;
 }
 
+static int SetValueObject(lua_State *L)
+{
+	DumpStack();
+	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
+	(*pp)->dummy = lua_tointeger(L, -1);
+	return 0;
+}
+
+static int IndexObject(lua_State *L)
+{
+	DumpStack();
+	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
+	const char* key = lua_tostring(L, -1);
+	if (!memcmp(key, "SetValue", 9)) {
+		lua_pushcfunction(L, SetValueObject);
+		return 1;
+	} else {
+		lua_pushinteger(L, (*pp)->dummy);
+		return 1;
+	}
+}
+
 static int DestroyObject(lua_State *L)
 {
 	DumpStack();
@@ -59,6 +83,7 @@ static int CreateObject(lua_State *L)
 	MyClass** pp = (MyClass**)lua_newuserdata(L, sizeof(MyClass*));
 	DumpStack();
 	*pp = new MyClass;
+	(*pp)->dummy = rand() % 100;
 //	luaL_setmetatable(L, myClassName);
 	luaL_getmetatable(L, myClassName);
 	DumpStack();
@@ -91,6 +116,13 @@ static void Bind()
 	DumpStack();
 	lua_settable(L, -3);
 	DumpStack();
+
+	lua_pushstring(L, "__index");
+	lua_pushcfunction(L, IndexObject);
+	DumpStack();
+	lua_settable(L, -3);
+	DumpStack();
+
 	lua_pop(L, 1);
 
 //	lua_register(L, "Printer", Printer);
