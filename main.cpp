@@ -36,7 +36,12 @@ static void _dumpStack(const char* func, int line)
 		printf("%d/%d: type=%s value=%s\n", positive, negative, typeName, value);
 	}
 }
+
+#ifdef _DEBUG
 #define DumpStack() _dumpStack(__FUNCTION__, __LINE__)
+#else
+#define DumpStack()
+#endif
 
 static int Printer(lua_State *L)
 {
