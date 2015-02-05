@@ -9,7 +9,7 @@ public:
 	int dummy;
 };
 
-const char* myClassName = "MyClass";
+static const char* myClassName = "MyClass";
 
 static int SetValue(lua_State *L)
 {

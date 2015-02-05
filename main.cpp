@@ -3,6 +3,7 @@
 lua_State *L;
 
 void BindMyClass();
+void BindVec4();
 
 static int Printer(lua_State *L)
 {
@@ -24,6 +25,7 @@ static void Bind()
 {
 	lua_register(L, "CreatePrinter", CreatePrinter);
 	BindMyClass();
+	BindVec4();
 }
 
 int main(int argc, char* argv[])
