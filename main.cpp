@@ -97,7 +97,7 @@ static int DestroyObject(lua_State *L)
 	return 0;
 }
 
-static int CreateObject(lua_State *L)
+static int MyClassNew(lua_State *L)
 {
 	DumpStack();
 	MyClass** pp = (MyClass**)lua_newuserdata(L, sizeof(MyClass*));
@@ -120,7 +120,7 @@ static int CreatePrinter(lua_State *L)
 	return 1;
 }
 
-static void Bind()
+static void BindMyClass()
 {
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
@@ -162,10 +162,13 @@ static void Bind()
 	DumpStack();
 
 	lua_pop(L, 1);
+	lua_register(L, "MyClass", MyClassNew);
+}
 
-//	lua_register(L, "Printer", Printer);
-	lua_register(L, "CreateObject", CreateObject);
+static void Bind()
+{
 	lua_register(L, "CreatePrinter", CreatePrinter);
+	BindMyClass();
 }
 
 int main(int argc, char* argv[])
