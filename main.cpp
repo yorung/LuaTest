@@ -1,47 +1,8 @@
-extern "C" {
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-}
+#include "af_lua_helpers.h"
 
-#include <crtdbg.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <assert.h>
-#include <string.h>
+lua_State *L;
 
-static lua_State *L;
-
-class MyClass
-{
-public:
-	int dummy;
-};
-
-const char* myClassName = "MyClass";
-
-static void _dumpStack(const char* func, int line)
-{
-	int top = lua_gettop(L);
-	printf("(%s,%d) top=%d\n", func, line, top);
-	for (int i = 0; i < top; i++) {
-		int positive = top - i;
-		int negative = -(i + 1);
-		int type = lua_type(L, positive);
-		int typeN = lua_type(L, negative);
-		assert(type == typeN);
-		const char* typeName = lua_typename(L, type);
-		const char* value = lua_tostring(L, positive);
-		const char* valueN = lua_tostring(L, negative);
-		printf("%d/%d: type=%s value=%s\n", positive, negative, typeName, value);
-	}
-}
-
-#ifdef _DEBUG
-#define DumpStack() _dumpStack(__FUNCTION__, __LINE__)
-#else
-#define DumpStack()
-#endif
+void BindMyClass();
 
 static int Printer(lua_State *L)
 {
@@ -51,118 +12,12 @@ static int Printer(lua_State *L)
 	return 0;
 }
 
-static int SetValueObject(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
-	(*pp)->dummy = (int)lua_tointeger(L, -1);
-	return 0;
-}
-
-static int TestMethodObject(lua_State *L)
-{
-	DumpStack();
-	return 0;
-}
-
-static int NewindexObject(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)luaL_checkudata(L, -3, myClassName);
-	const char* key = lua_tostring(L, -2);
-	const char* val = lua_tostring(L, -1);
-	return 0;
-}
-
-static int IndexObject(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
-	const char* key = lua_tostring(L, -1);
-	if (!memcmp(key, "SetValue", 9)) {
-		lua_pushcfunction(L, SetValueObject);
-		return 1;
-	} else {
-		lua_pushinteger(L, (*pp)->dummy);
-		return 1;
-	}
-}
-
-static int DestroyObject(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)luaL_checkudata(L, -1, myClassName);
-	delete *pp;
-	DumpStack();
-	return 0;
-}
-
-static int MyClassNew(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)lua_newuserdata(L, sizeof(MyClass*));
-	DumpStack();
-	*pp = new MyClass;
-	(*pp)->dummy = rand() % 100;
-//	luaL_setmetatable(L, myClassName);
-	luaL_getmetatable(L, myClassName);
-	DumpStack();
-	lua_setmetatable(L, -2);
-	DumpStack();
-	return 1;
-}
-
 static int CreatePrinter(lua_State *L)
 {
 	int top = lua_gettop(L);
 	printf("CreatePrinter: top=%d\n", top);
 	lua_pushcfunction(L, Printer);
 	return 1;
-}
-
-static void BindMyClass()
-{
-	int r = luaL_newmetatable(L, myClassName);
-	assert(r);
-	DumpStack();
-//	lua_pushvalue(L, -1);
-//	lua_pushstring(L, myClassName);
-//	DumpStack();
-//	lua_settable(L, LUA_REGISTRYINDEX);
-//	DumpStack();
-
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, 1);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-	lua_pushstring(L, "__gc");
-	lua_pushcfunction(L, DestroyObject);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-//	lua_pushstring(L, "__index");
-//	lua_pushcfunction(L, IndexObject);
-//	DumpStack();
-//	lua_settable(L, -3);
-//	DumpStack();
-
-	lua_pushstring(L, "__newindex");
-	lua_pushcfunction(L, NewindexObject);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-	lua_pushstring(L, "TestMethod");
-	lua_pushcfunction(L, TestMethodObject);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-	lua_pop(L, 1);
-	lua_register(L, "MyClass", MyClassNew);
 }
 
 static void Bind()
