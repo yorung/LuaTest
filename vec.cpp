@@ -18,7 +18,7 @@ static int SetValue(lua_State *L)
 static int Vec4NewIndex(lua_State *L)
 {
 	DumpStack();
-	Vec4* p = (Vec4*)luaL_checkudata(L, -2, myClassName);
+	Vec4* p = (Vec4*)luaL_checkudata(L, -3, myClassName);
 	const char* key = lua_tostring(L, -2);
 	const char* val = lua_tostring(L, -1);
 	return 0;
