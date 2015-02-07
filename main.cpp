@@ -1,29 +1,21 @@
 #include "af_lua_helpers.h"
+#include <windows.h>
 
 lua_State *L;
 
 void BindMyClass();
 void BindVec4();
 
-static int Printer(lua_State *L)
+static int MesBox(lua_State *L)
 {
-	int top = lua_gettop(L);
-	const char* name = lua_tostring(L, 1);
-	printf("Printer: top=%d message=%s\n", top, name);
+	const char* str = lua_tostring(L, 1);
+	MessageBoxA(nullptr, str, "LuaTest", MB_OK);
 	return 0;
-}
-
-static int CreatePrinter(lua_State *L)
-{
-	int top = lua_gettop(L);
-	printf("CreatePrinter: top=%d\n", top);
-	lua_pushcfunction(L, Printer);
-	return 1;
 }
 
 static void Bind()
 {
-	lua_register(L, "CreatePrinter", CreatePrinter);
+	lua_register(L, "MesBox", MesBox);
 	BindMyClass();
 	BindVec4();
 }

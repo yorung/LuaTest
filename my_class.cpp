@@ -6,46 +6,25 @@ extern lua_State *L;
 class MyClass
 {
 public:
-	int dummy;
+	int value;
 };
 
 static const char* myClassName = "MyClass";
 
-static int SetValue(lua_State *L)
+static int MyClassSetValue(lua_State *L)
 {
 	DumpStack();
 	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
-	(*pp)->dummy = (int)lua_tointeger(L, -1);
+	(*pp)->value = (int)lua_tointeger(L, -1);
 	return 0;
 }
 
-static int TestMethod(lua_State *L)
+static int MyClassGetValue(lua_State *L)
 {
 	DumpStack();
-	return 0;
-}
-
-static int NewindexObject(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)luaL_checkudata(L, -3, myClassName);
-	const char* key = lua_tostring(L, -2);
-	const char* val = lua_tostring(L, -1);
-	return 0;
-}
-
-static int IndexObject(lua_State *L)
-{
-	DumpStack();
-	MyClass** pp = (MyClass**)luaL_checkudata(L, -2, myClassName);
-	const char* key = lua_tostring(L, -1);
-	if (!memcmp(key, "SetValue", 9)) {
-		lua_pushcfunction(L, SetValue);
-		return 1;
-	} else {
-		lua_pushinteger(L, (*pp)->dummy);
-		return 1;
-	}
+	MyClass** pp = (MyClass**)luaL_checkudata(L, -1, myClassName);
+	lua_pushinteger(L, (*pp)->value);
+	return 1;
 }
 
 static int MyClassGC(lua_State *L)
@@ -59,12 +38,10 @@ static int MyClassGC(lua_State *L)
 
 static int MyClassNew(lua_State *L)
 {
-	DumpStack();
 	MyClass** pp = (MyClass**)lua_newuserdata(L, sizeof(MyClass*));
 	DumpStack();
 	*pp = new MyClass;
-	(*pp)->dummy = rand() % 100;
-//	luaL_setmetatable(L, myClassName);
+	(*pp)->value = 0;
 	luaL_getmetatable(L, myClassName);
 	DumpStack();
 	lua_setmetatable(L, -2);
@@ -77,11 +54,6 @@ void BindMyClass()
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
 	DumpStack();
-//	lua_pushvalue(L, -1);
-//	lua_pushstring(L, myClassName);
-//	DumpStack();
-//	lua_settable(L, LUA_REGISTRYINDEX);
-//	DumpStack();
 
 	lua_pushstring(L, "__index");
 	lua_pushvalue(L, 1);
@@ -95,20 +67,14 @@ void BindMyClass()
 	lua_settable(L, -3);
 	DumpStack();
 
-//	lua_pushstring(L, "__index");
-//	lua_pushcfunction(L, IndexObject);
-//	DumpStack();
-//	lua_settable(L, -3);
-//	DumpStack();
-
-	lua_pushstring(L, "__newindex");
-	lua_pushcfunction(L, NewindexObject);
+	lua_pushstring(L, "SetValue");
+	lua_pushcfunction(L, MyClassSetValue);
 	DumpStack();
 	lua_settable(L, -3);
 	DumpStack();
 
-	lua_pushstring(L, "TestMethod");
-	lua_pushcfunction(L, TestMethod);
+	lua_pushstring(L, "GetValue");
+	lua_pushcfunction(L, MyClassGetValue);
 	DumpStack();
 	lua_settable(L, -3);
 	DumpStack();

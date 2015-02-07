@@ -28,6 +28,7 @@ static int Vec4ToString(lua_State *L)
 	lua_pushstring(L, buf);
 	return 1;
 }
+
 static int Vec4NewIndex(lua_State *L)
 {
 	DumpStack();

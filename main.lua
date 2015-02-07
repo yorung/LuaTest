@@ -14,7 +14,7 @@ local function DumpGlobal()
 end
 
 
---dofile("printer.lua")
+--dofile("mes_box.lua")
 dofile("my_class.lua")
 
-dofile("vec4.lua")
+--dofile("vec4.lua")

@@ -20,6 +20,5 @@ print("value of v: ", v)
 local vv = v.wzyx
 print("value of vv: ", vv)
 
-
 v.xyzw = Vec4(1.111, 2.2222, 3.333, 4.444).wzyx
 print("value of v: ", v)
