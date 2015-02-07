@@ -187,5 +187,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="main.lua" />
+    <None Include="my_class.lua" />
+    <None Include="printer.lua" />
+    <None Include="vec4.lua" />
   </ItemGroup>
 </Project>

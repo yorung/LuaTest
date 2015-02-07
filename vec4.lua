@@ -7,11 +7,19 @@ for k,v in pairs(m) do
 	print(k, v)
 end
 
-print("---------------methods")
-v:SetValue(v)
+print("---------------vector operation")
 
---print("value ob abc:", v.abc)
---v:SetValue(567)
---print("value ob abc:", v.abc)
+print("value of v: ", v)
 
-v.def = "my string"
+v.xyzw = Vec4(1, 2, 3, 4)
+print("value of v: ", v)
+
+v.wzyx = Vec4(1, 2, 3, 4)
+print("value of v: ", v)
+
+local vv = v.wzyx
+print("value of vv: ", vv)
+
+
+v.xyzw = Vec4(1.111, 2.2222, 3.333, 4.444).wzyx
+print("value of v: ", v)

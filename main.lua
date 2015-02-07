@@ -15,6 +15,6 @@ end
 
 
 --dofile("printer.lua")
---dofile("my_class.lua")
+dofile("my_class.lua")
 
 dofile("vec4.lua")

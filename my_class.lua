@@ -10,8 +10,8 @@ end
 print("---------------methods")
 obj:TestMethod()
 
---print("value ob abc:", obj.abc)
+--print("value of abc:", obj.abc)
 --obj:SetValue(567)
---print("value ob abc:", obj.abc)
+--print("value of abc:", obj.abc)
 
 obj.def = "my string"
