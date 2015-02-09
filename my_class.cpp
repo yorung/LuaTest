@@ -61,22 +61,13 @@ void BindMyClass()
 	lua_settable(L, -3);
 	DumpStack();
 
-	lua_pushstring(L, "__gc");
-	lua_pushcfunction(L, MyClassGC);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-	lua_pushstring(L, "SetValue");
-	lua_pushcfunction(L, MyClassSetValue);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-	lua_pushstring(L, "GetValue");
-	lua_pushcfunction(L, MyClassGetValue);
-	DumpStack();
-	lua_settable(L, -3);
+	static struct luaL_Reg methods[] =
+	{
+		{"__gc", MyClassGC},
+		{"SetValue", MyClassSetValue},
+		{"GetValue", MyClassGetValue},
+	};
+	luaL_setfuncs(L, methods, 0);
 	DumpStack();
 
 	lua_pop(L, 1);
