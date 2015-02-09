@@ -11,9 +11,16 @@ void _dumpStack(lua_State* L, const char* func, int line)
 		int typeN = lua_type(L, negative);
 		assert(type == typeN);
 		const char* typeName = lua_typename(L, type);
-		const char* value = lua_tostring(L, positive);
-		const char* valueN = lua_tostring(L, negative);
-		printf("%d/%d: type=%s value=%s\n", positive, negative, typeName, value);
+		printf("%d/%d: type=%s", positive, negative, typeName);
+		switch (type) {
+		case LUA_TNUMBER:
+			printf(" value=%f", lua_tonumber(L, positive));
+			break;
+		case LUA_TSTRING:
+			printf(" value=%s", lua_tostring(L, positive));
+			break;
+		}
+		printf("\n");
 	}
 }
 
