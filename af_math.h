@@ -94,6 +94,11 @@ struct ivec4
 	ivec4 operator/=(int r) { return *this = *this / r; }
 };
 
+inline affloat dot(const Vec4& l, const Vec4& r)
+{
+	return l.x * r.x + l.y * r.y + l.z * r.z + l.w * r.w;
+}
+
 inline affloat dot(const Vec3& l, const Vec3& r)
 {
 	return l.x * r.x + l.y * r.y + l.z * r.z;

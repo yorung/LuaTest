@@ -20,6 +20,14 @@ static float& vec4IndexByChar(Vec4& v, char c)
 	return dummyForSafe;
 }
 
+static int Vec4GetLength(lua_State *L)
+{
+	Vec4* self = (Vec4*)luaL_checkudata(L, -1, myClassName);
+	float l = length(*self);
+	lua_pushnumber(L, l);
+	return 1;
+}
+
 static int Vec4ToString(lua_State *L)
 {
 	char buf[64];
@@ -34,16 +42,31 @@ static int Vec4NewIndex(lua_State *L)
 	DumpStack();
 	Vec4* self = (Vec4*)luaL_checkudata(L, -3, myClassName);
 	const char* key = lua_tostring(L, -2);
-	Vec4* src = (Vec4*)luaL_checkudata(L, -1, myClassName);
-	if (!self || !src || !key) {
+	if (!self || !key) {
 		return 0;	// error
+	}
+	int srcType = lua_type(L, -1);
+	Vec4 src;
+	Vec4* srcPtr;
+	switch (srcType) {
+	default:
+		return 0;	// error
+	case LUA_TNUMBER:
+		src.x = src.y = src.z = src.w = (float)lua_tonumber(L, -1);
+		break;
+	case LUA_TUSERDATA:
+		if (!(srcPtr = (Vec4*)luaL_checkudata(L, -1, myClassName))) {
+			return 0;	// error
+		}
+		src = *srcPtr;
+		break;
 	}
 	char key4[4] = {'\0', '\0', '\0', '\0'};
 	memcpy(key4, key, std::min((size_t)4, strlen(key)));
-	vec4IndexByChar(*self, key4[0]) = src->x;
-	vec4IndexByChar(*self, key4[1]) = src->y;
-	vec4IndexByChar(*self, key4[2]) = src->z;
-	vec4IndexByChar(*self, key4[3]) = src->w;
+	vec4IndexByChar(*self, key4[0]) = src.x;
+	vec4IndexByChar(*self, key4[1]) = src.y;
+	vec4IndexByChar(*self, key4[2]) = src.z;
+	vec4IndexByChar(*self, key4[3]) = src.w;
 	return 1;
 }
 
@@ -51,6 +74,10 @@ static int Vec4Index(lua_State *L)
 {
 	DumpStack();
 	const char* key = lua_tostring(L, -1);
+	if (!strcmp(key, "GetLength")) {
+		lua_pushcfunction(L, Vec4GetLength);
+		return 1;
+	}
 	Vec4* src = (Vec4*)luaL_checkudata(L, -2, myClassName);
 	if (!key || !src) {
 		return 0;	// error
@@ -100,11 +127,6 @@ void BindVec4()
 //	lua_settable(L, LUA_REGISTRYINDEX);
 //	DumpStack();
 
-	lua_pushstring(L, "__index");
-	lua_pushcfunction(L, Vec4Index);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
 
 	lua_pushstring(L, "__tostring");
 	lua_pushcfunction(L, Vec4ToString);
@@ -112,12 +134,20 @@ void BindVec4()
 	lua_settable(L, -3);
 	DumpStack();
 
+	lua_pushstring(L, "__index");
+	lua_pushcfunction(L, Vec4Index);
+	DumpStack();
+	lua_settable(L, -3);
+	DumpStack();
 
-//	lua_pushstring(L, "__index");
-//	lua_pushcfunction(L, IndexObject);
-//	DumpStack();
-//	lua_settable(L, -3);
-//	DumpStack();
+#if 0
+	// wrong! it's never used; __index doesn't refer itself
+	lua_pushstring(L, "GetLength");
+	lua_pushcfunction(L, Vec4GetLength);
+	DumpStack();
+	lua_settable(L, -3);
+	DumpStack();
+#endif
 
 	lua_pushstring(L, "__newindex");
 	lua_pushcfunction(L, Vec4NewIndex);
