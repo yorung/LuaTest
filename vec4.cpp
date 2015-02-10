@@ -118,41 +118,18 @@ static int Vec4New(lua_State *L)
 
 void BindVec4()
 {
+	DumpStack();
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
 	DumpStack();
-//	lua_pushvalue(L, -1);
-//	lua_pushstring(L, myClassName);
-//	DumpStack();
-//	lua_settable(L, LUA_REGISTRYINDEX);
-//	DumpStack();
 
-
-	lua_pushstring(L, "__tostring");
-	lua_pushcfunction(L, Vec4ToString);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-	lua_pushstring(L, "__index");
-	lua_pushcfunction(L, Vec4Index);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
-#if 0
-	// wrong! it's never used; __index doesn't refer itself
-	lua_pushstring(L, "GetLength");
-	lua_pushcfunction(L, Vec4GetLength);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-#endif
-
-	lua_pushstring(L, "__newindex");
-	lua_pushcfunction(L, Vec4NewIndex);
-	DumpStack();
-	lua_settable(L, -3);
+	static struct luaL_Reg methods[] =
+	{
+		{"__tostring", Vec4ToString},
+		{"__index", Vec4Index },
+		{"__newindex", Vec4NewIndex },
+	};
+	luaL_setfuncs(L, methods, 0);
 	DumpStack();
 
 	lua_pop(L, 1);
