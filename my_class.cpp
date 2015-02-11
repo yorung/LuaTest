@@ -66,6 +66,7 @@ void BindMyClass()
 		{"__gc", MyClassGC},
 		{"SetValue", MyClassSetValue},
 		{"GetValue", MyClassGetValue},
+		{nullptr, nullptr},
 	};
 	luaL_setfuncs(L, methods, 0);
 	DumpStack();

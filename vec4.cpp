@@ -128,6 +128,7 @@ void BindVec4()
 		{"__tostring", Vec4ToString},
 		{"__index", Vec4Index },
 		{"__newindex", Vec4NewIndex },
+		{nullptr, nullptr},
 	};
 	luaL_setfuncs(L, methods, 0);
 	DumpStack();
