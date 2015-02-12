@@ -15,7 +15,17 @@ static int MesBox(lua_State *L)
 
 static void Bind()
 {
-	lua_register(L, "MesBox", MesBox);
+	static luaL_Reg globalFuncs[] = {
+		{ "MesBox", MesBox },
+		{ nullptr, nullptr },
+	};
+	lua_pushglobaltable(L);
+	DumpStack();
+	luaL_setfuncs(L, globalFuncs, 0);
+	lua_pop(L, 1);
+	DumpStack();
+
+//	lua_register(L, "MesBox", MesBox);
 	BindMyClass();
 	BindVec4();
 }
