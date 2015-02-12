@@ -6,17 +6,10 @@ lua_State *L;
 void BindMyClass();
 void BindVec4();
 
-static int MesBox(lua_State *L)
-{
-	const char* str = lua_tostring(L, 1);
-	MessageBoxA(nullptr, str, "LuaTest", MB_OK);
-	return 0;
-}
-
 static void Bind()
 {
 	static luaL_Reg globalFuncs[] = {
-		{ "MesBox", MesBox },
+		{ "MesBox", [](lua_State* L){ MessageBoxA(nullptr, lua_tostring(L, -1), "lambda box", MB_OK); return 0; } },
 		{ nullptr, nullptr },
 	};
 	lua_pushglobaltable(L);
