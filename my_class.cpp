@@ -9,7 +9,10 @@ public:
 	int value;
 };
 
-static const char* myClassName = "MyClass";
+namespace
+{
+	char myClassName[] = "MyClass";
+}
 
 static int MyClassSetValue(lua_State *L)
 {
@@ -27,13 +30,14 @@ static int MyClassGetValue(lua_State *L)
 	return 1;
 }
 
-static int MyClassGC(lua_State *L)
+template <class MyClass, const char* myClassName> static int AnyTypeGC(lua_State* L)
 {
 	DumpStack();
 	MyClass** pp = (MyClass**)luaL_checkudata(L, -1, myClassName);
 	delete *pp;
 	DumpStack();
 	return 0;
+
 }
 
 static int MyClassNew(lua_State *L)
@@ -63,7 +67,7 @@ void BindMyClass()
 
 	static struct luaL_Reg methods[] =
 	{
-		{"__gc", MyClassGC},
+		{"__gc", AnyTypeGC<MyClass, myClassName>},
 		{"SetValue", MyClassSetValue},
 		{"GetValue", MyClassGetValue},
 		{nullptr, nullptr},
