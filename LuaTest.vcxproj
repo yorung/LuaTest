@@ -116,6 +116,7 @@
     <ClCompile Include="lua-5.3.0\src\lzio.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="my_class.cpp" />
+    <ClCompile Include="bind_win.cpp" />
     <ClCompile Include="vec4.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="lua-5.3.0\src\lzio.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bind_win.lua" />
     <None Include="main.lua" />
     <None Include="my_class.lua" />
     <None Include="mes_box.lua" />

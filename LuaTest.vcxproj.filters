@@ -109,6 +109,7 @@
     <ClCompile Include="my_class.cpp" />
     <ClCompile Include="af_lua_helpers.cpp" />
     <ClCompile Include="vec4.cpp" />
+    <ClCompile Include="bind_win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lua-5.3.0\src\lapi.h">
@@ -190,5 +191,6 @@
     <None Include="my_class.lua" />
     <None Include="vec4.lua" />
     <None Include="mes_box.lua" />
+    <None Include="bind_win.lua" />
   </ItemGroup>
 </Project>

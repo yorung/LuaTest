@@ -5,6 +5,7 @@ lua_State *L;
 
 void BindMyClass();
 void BindVec4();
+void BindWin();
 
 static void Bind()
 {
@@ -21,6 +22,7 @@ static void Bind()
 //	lua_register(L, "MesBox", MesBox);
 	BindMyClass();
 	BindVec4();
+	BindWin();
 }
 
 int main(int argc, char* argv[])

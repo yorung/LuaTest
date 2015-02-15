@@ -13,7 +13,9 @@ local function DumpGlobal()
 	print("length of _G: "..tostring(#_G))
 end
 
+print("main.lua executing...")
 
+dofile("bind_win.lua")
 dofile("mes_box.lua")
 dofile("my_class.lua")
 dofile("vec4.lua")
