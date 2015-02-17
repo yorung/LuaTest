@@ -25,29 +25,8 @@ static const char* myClassName = "MyClass";
 	MyClass* p = (MyClass*)luaL_checkudata(L, 1, myClassName); \
 	if (!p) { return 0; }
 
-static int MyClassNew(lua_State *L)
-{
-	MyClass* p = new (lua_newuserdata(L, sizeof(MyClass))) MyClass;
-	DumpStack();
-	luaL_getmetatable(L, myClassName);
-	DumpStack();
-	lua_setmetatable(L, -2);
-	DumpStack();
-	return 1;
-}
-
 void BindMyClass()
 {
-	int r = luaL_newmetatable(L, myClassName);
-	assert(r);
-	DumpStack();
-
-	lua_pushstring(L, "__index");
-	lua_pushvalue(L, 1);
-	DumpStack();
-	lua_settable(L, -3);
-	DumpStack();
-
 	static struct luaL_Reg methods[] =
 	{
 		{ "__gc", [](lua_State* L) { GET_MYCLASS p->~MyClass(); return 0; } },
@@ -55,9 +34,5 @@ void BindMyClass()
 		{ "GetValue", [](lua_State* L) { GET_MYCLASS lua_pushinteger(L, p->value); return 1; } },
 		{ nullptr, nullptr },
 	};
-	luaL_setfuncs(L, methods, 0);
-	DumpStack();
-
-	lua_pop(L, 1);
-	lua_register(L, "MyClass", MyClassNew);
+	BindClass(L, myClassName, methods, [](lua_State* L) { new (lua_newuserdata(L, sizeof(MyClass))) MyClass; return 1; });
 }
