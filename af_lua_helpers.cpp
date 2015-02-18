@@ -19,6 +19,11 @@ void _dumpStack(lua_State* L, const char* func, int line)
 		case LUA_TSTRING:
 			printf(" value=%s", lua_tostring(L, positive));
 			break;
+		case LUA_TFUNCTION:
+			if (lua_iscfunction(L, positive)) {
+				printf(" C:%p", lua_tocfunction(L, positive));
+			}
+			break;
 		}
 		printf("\n");
 	}
