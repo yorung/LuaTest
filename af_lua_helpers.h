@@ -12,4 +12,4 @@ void _dumpStack(lua_State* L, const char* func, int line);
 #define DumpStack()
 #endif
 
-void BindClass(lua_State* L, const char* className, luaL_Reg methods[], int(*creator)(lua_State*));
+void BindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_CFunction creator);

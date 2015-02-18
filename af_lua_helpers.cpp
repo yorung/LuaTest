@@ -52,7 +52,7 @@ static void CreateClassMetatable(lua_State* L, const char* className, luaL_Reg m
 	lua_pop(L, 1);
 }
 
-static void CreateClassInstanceCreator(lua_State* L, const char* className, int(*creator)(lua_State*))
+static void CreateClassInstanceCreator(lua_State* L, const char* className, lua_CFunction creator)
 {
 	lua_pushstring(L, className);
 	lua_pushcfunction(L, creator);
@@ -63,7 +63,7 @@ static void CreateClassInstanceCreator(lua_State* L, const char* className, int(
 	DumpStack();
 }
 
-void BindClass(lua_State* L, const char* className, luaL_Reg methods[], int(*creator)(lua_State*))
+void BindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_CFunction creator)
 {
 	CreateClassMetatable(L, className, methods);
 	CreateClassInstanceCreator(L, className, creator);
