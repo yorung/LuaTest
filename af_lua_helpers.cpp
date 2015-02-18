@@ -50,7 +50,7 @@ static void CreateClassMetatable(lua_State* L, const char* className, luaL_Reg m
 	assert(r);
 
 	lua_pushstring(L, "__index");
-	lua_pushvalue(L, 1);
+	lua_pushvalue(L, -2);
 	lua_settable(L, -3);
 
 	luaL_setfuncs(L, methods, 0);
