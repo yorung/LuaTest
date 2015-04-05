@@ -5,13 +5,13 @@
 #include <assert.h>
 #include <string.h>
 
-void _dumpStack(lua_State* L, const char* func, int line);
+void _aflDumpStack(lua_State* L, const char* func, int line);
 #ifdef _DEBUG
-#define DumpStack() _dumpStack(L, __FUNCTION__, __LINE__)
-#define DumpStackL(L) _dumpStack(L, __FUNCTION__, __LINE__)
+#define aflDumpStack() _aflDumpStack(L, __FUNCTION__, __LINE__)
+#define aflDumpStackL(L) _aflDumpStack(L, __FUNCTION__, __LINE__)
 #else
-#define DumpStack()
-#define DumpStackL(L)
+#define aflDumpStack()
+#define aflDumpStackL(L)
 #endif
 
-void BindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_CFunction creator);
+void aflBindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_CFunction creator);

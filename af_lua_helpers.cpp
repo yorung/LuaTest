@@ -1,6 +1,6 @@
 #include "af_lua_helpers.h"
 
-void _dumpStack(lua_State* L, const char* func, int line)
+void _aflDumpStack(lua_State* L, const char* func, int line)
 {
 	int top = lua_gettop(L);
 	printf("(%s,%d) top=%d\n", func, line, top);
@@ -32,15 +32,15 @@ void _dumpStack(lua_State* L, const char* func, int line)
 
 static int CreateCppClassInstance(lua_State* L)
 {
-	DumpStack();
+	aflDumpStack();
 	const char* className = lua_tostring(L, lua_upvalueindex(1));
 	lua_CFunction actualInstanceCreator = lua_tocfunction(L, lua_upvalueindex(2));
 	actualInstanceCreator(L);
-	DumpStack();
+	aflDumpStack();
 	luaL_getmetatable(L, className);
-	DumpStack();
+	aflDumpStack();
 	lua_setmetatable(L, -2);
-	DumpStack();
+	aflDumpStack();
 	return 1;
 }
 
@@ -61,14 +61,14 @@ static void CreateClassInstanceCreator(lua_State* L, const char* className, lua_
 {
 	lua_pushstring(L, className);
 	lua_pushcfunction(L, creator);
-	DumpStack();
+	aflDumpStack();
 	lua_pushcclosure(L, CreateCppClassInstance, 2);
-	DumpStack();
+	aflDumpStack();
 	lua_setglobal(L, className);
-	DumpStack();
+	aflDumpStack();
 }
 
-void BindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_CFunction creator)
+void aflBindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_CFunction creator)
 {
 	CreateClassMetatable(L, className, methods);
 	CreateClassInstanceCreator(L, className, creator);

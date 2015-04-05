@@ -39,7 +39,7 @@ static int Vec4ToString(lua_State *L)
 
 static int Vec4NewIndex(lua_State *L)
 {
-	DumpStack();
+	aflDumpStack();
 	Vec4* self = (Vec4*)luaL_checkudata(L, -3, myClassName);
 	const char* key = lua_tostring(L, -2);
 	if (!self || !key) {
@@ -72,7 +72,7 @@ static int Vec4NewIndex(lua_State *L)
 
 static int Vec4Index(lua_State *L)
 {
-	DumpStack();
+	aflDumpStack();
 	const char* key = lua_tostring(L, -1);
 	if (!strcmp(key, "GetLength")) {
 		lua_pushcfunction(L, Vec4GetLength);
@@ -84,11 +84,11 @@ static int Vec4Index(lua_State *L)
 	}
 	int keyLen = strlen(key);
 
-	DumpStack();
+	aflDumpStack();
 	Vec4* ret = (Vec4*)lua_newuserdata(L, sizeof(Vec4));
 	luaL_getmetatable(L, myClassName);
 	lua_setmetatable(L, -2);
-	DumpStack();
+	aflDumpStack();
 
 	ret->x = keyLen < 1 ? 0 : vec4IndexByChar(*src, key[0]);
 	ret->y = keyLen < 2 ? 0 : vec4IndexByChar(*src, key[1]);
@@ -105,23 +105,23 @@ static int Vec4New(lua_State *L)
 	v.y = top < 3 ? 0 : (float)lua_tonumber(L, -3);
 	v.z = top < 2 ? 0 : (float)lua_tonumber(L, -2);
 	v.w = top < 1 ? 0 : (float)lua_tonumber(L, -1);
-	DumpStack();
+	aflDumpStack();
 	Vec4* p = (Vec4*)lua_newuserdata(L, sizeof(Vec4));
 	*p = v;
-	DumpStack();
+	aflDumpStack();
 	luaL_getmetatable(L, myClassName);
-	DumpStack();
+	aflDumpStack();
 	lua_setmetatable(L, -2);
-	DumpStack();
+	aflDumpStack();
 	return 1;
 }
 
 void BindVec4()
 {
-	DumpStack();
+	aflDumpStack();
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
-	DumpStack();
+	aflDumpStack();
 
 	static struct luaL_Reg methods[] =
 	{
@@ -131,7 +131,7 @@ void BindVec4()
 		{nullptr, nullptr},
 	};
 	luaL_setfuncs(L, methods, 0);
-	DumpStack();
+	aflDumpStack();
 
 	lua_pop(L, 1);
 	lua_register(L, "Vec4", Vec4New);

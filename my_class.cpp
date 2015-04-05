@@ -34,5 +34,5 @@ void BindMyClass()
 		{ "GetValue", [](lua_State* L) { GET_MYCLASS lua_pushinteger(L, p->value); return 1; } },
 		{ nullptr, nullptr },
 	};
-	BindClass(L, myClassName, methods, [](lua_State* L) { new (lua_newuserdata(L, sizeof(MyClass))) MyClass; return 1; });
+	aflBindClass(L, myClassName, methods, [](lua_State* L) { new (lua_newuserdata(L, sizeof(MyClass))) MyClass; return 1; });
 }

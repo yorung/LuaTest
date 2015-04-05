@@ -14,10 +14,10 @@ static void Bind()
 		{ nullptr, nullptr },
 	};
 	lua_pushglobaltable(L);
-	DumpStack();
+	aflDumpStack();
 	luaL_setfuncs(L, globalFuncs, 0);
 	lua_pop(L, 1);
-	DumpStack();
+	aflDumpStack();
 
 //	lua_register(L, "MesBox", MesBox);
 	BindMyClass();

@@ -28,7 +28,7 @@ static int RECTIndex(lua_State *L)
 {
 	GET_RECT
 	const char* key = lua_tostring(L, 2);
-	DumpStack();
+	aflDumpStack();
 	if (!strcmp(key, "left")) {
 		lua_pushnumber(L, r->left);
 	}
@@ -52,7 +52,7 @@ static int RECTNewIndex(lua_State *L)
 	GET_RECT
 	const char* key = lua_tostring(L, 2);
 	LONG val = (LONG)lua_tointeger(L, 3);
-	DumpStack();
+	aflDumpStack();
 	if (!strcmp(key, "left")) {
 		r->left = val;
 	} else if (!strcmp(key, "top")) {
@@ -73,23 +73,23 @@ static int RECTNew(lua_State *L)
 	r.top = top < 3 ? 0 : (LONG)lua_tointeger(L, -3);
 	r.right = top < 2 ? 0 : (LONG)lua_tointeger(L, -2);
 	r.bottom = top < 1 ? 0 : (LONG)lua_tointeger(L, -1);
-	DumpStack();
+	aflDumpStack();
 	RECT* p = (RECT*)lua_newuserdata(L, sizeof(RECT));
 	*p = r;
-	DumpStack();
+	aflDumpStack();
 	luaL_getmetatable(L, myClassName);
-	DumpStack();
+	aflDumpStack();
 	lua_setmetatable(L, -2);
-	DumpStack();
+	aflDumpStack();
 	return 1;
 }
 
 void BindWin()
 {
-	DumpStack();
+	aflDumpStack();
 	int r = luaL_newmetatable(L, myClassName);
 	assert(r);
-	DumpStack();
+	aflDumpStack();
 
 	static struct luaL_Reg indexMethods[] =
 	{
@@ -99,7 +99,7 @@ void BindWin()
 		{ nullptr, nullptr },
 	};
 	luaL_setfuncs(L, indexMethods, 0);
-	DumpStack();
+	aflDumpStack();
 
 	lua_pop(L, 1);
 	lua_register(L, myClassName, RECTNew);
