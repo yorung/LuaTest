@@ -7,7 +7,23 @@ void BindMyClass();
 void BindVec4();
 void BindWin();
 
-static void Bind()
+static void BindNamespace()
+{
+	static luaL_Reg inNamespaceFuncs[] = {
+		{ "MesBox", [](lua_State* L){ MessageBoxA(nullptr, lua_tostring(L, -1), "MesBox in namespace", MB_OK); return 0; } },
+		{ nullptr, nullptr },
+	};
+	lua_pushglobaltable(L);
+	lua_pushstring(L, "myNamespace");
+	lua_newtable(L);
+	luaL_setfuncs(L, inNamespaceFuncs, 0);
+	aflDumpStack();
+	lua_settable(L, -3);
+	lua_pop(L, 1);
+	aflDumpStack();
+}
+
+static void BindGlobal()
 {
 	static luaL_Reg globalFuncs[] = {
 		{ "MesBox", [](lua_State* L){ MessageBoxA(nullptr, lua_tostring(L, -1), "lambda box", MB_OK); return 0; } },
@@ -18,8 +34,13 @@ static void Bind()
 	luaL_setfuncs(L, globalFuncs, 0);
 	lua_pop(L, 1);
 	aflDumpStack();
+	//	lua_register(L, "MesBox", MesBox);
+}
 
-//	lua_register(L, "MesBox", MesBox);
+static void Bind()
+{
+	BindGlobal();
+	BindNamespace();
 	BindMyClass();
 	BindVec4();
 	BindWin();
