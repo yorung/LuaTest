@@ -73,3 +73,15 @@ void aflBindClass(lua_State* L, const char* className, luaL_Reg methods[], lua_C
 	CreateClassMetatable(L, className, methods);
 	CreateClassInstanceCreator(L, className, creator);
 }
+
+void aflBindNamespace(lua_State* L, const char* nameSpace, luaL_Reg funcs[])
+{
+	lua_pushglobaltable(L);
+	lua_pushstring(L, nameSpace);
+	lua_newtable(L);
+	luaL_setfuncs(L, funcs, 0);
+	aflDumpStack();
+	lua_settable(L, -3);
+	lua_pop(L, 1);
+	aflDumpStack();
+}

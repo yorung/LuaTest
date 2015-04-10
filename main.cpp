@@ -13,14 +13,7 @@ static void BindNamespace()
 		{ "MesBox", [](lua_State* L){ MessageBoxA(nullptr, lua_tostring(L, -1), "MesBox in namespace", MB_OK); return 0; } },
 		{ nullptr, nullptr },
 	};
-	lua_pushglobaltable(L);
-	lua_pushstring(L, "myNamespace");
-	lua_newtable(L);
-	luaL_setfuncs(L, inNamespaceFuncs, 0);
-	aflDumpStack();
-	lua_settable(L, -3);
-	lua_pop(L, 1);
-	aflDumpStack();
+	aflBindNamespace(L, "myNamespace", inNamespaceFuncs);
 }
 
 static void BindGlobal()
