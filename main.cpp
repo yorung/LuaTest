@@ -16,7 +16,7 @@ static void BindNamespace()
 	aflBindNamespace(L, "myNamespace", inNamespaceFuncs);
 }
 
-static void BindGlobal()
+static void BindGlobalfuncs()
 {
 	static luaL_Reg globalFuncs[] = {
 		{ "MesBox", [](lua_State* L){ MessageBoxA(nullptr, lua_tostring(L, -1), "lambda box", MB_OK); return 0; } },
@@ -30,9 +30,23 @@ static void BindGlobal()
 	//	lua_register(L, "MesBox", MesBox);
 }
 
+static void BindGlobalVariables()
+{
+	aflDumpStack();
+	lua_pushglobaltable(L);
+	lua_pushstring(L, "SCREEN_WIDTH");
+	lua_pushinteger(L, 1000);
+	aflDumpStack();
+	lua_settable(L, -3);
+	aflDumpStack();
+	lua_pop(L, 1);
+	aflDumpStack();
+}
+
 static void Bind()
 {
-	BindGlobal();
+	BindGlobalfuncs();
+	BindGlobalVariables();
 	BindNamespace();
 	BindMyClass();
 	BindVec4();
