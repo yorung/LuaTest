@@ -30,7 +30,7 @@ static void BindGlobalfuncs()
 	//	lua_register(L, "MesBox", MesBox);
 }
 
-static void BindGlobalVariables()
+static void StoreGlobalVariables()
 {
 	aflDumpStack();
 	lua_pushglobaltable(L);
@@ -43,14 +43,43 @@ static void BindGlobalVariables()
 	aflDumpStack();
 }
 
+static void StoreVariablesIntoNamespace()
+{
+	aflDumpStack();
+	lua_pushglobaltable(L);
+	lua_pushstring(L, "TestNameSpace");
+	lua_newtable(L);
+
+	lua_pushstring(L, "Variable100");
+	lua_pushinteger(L, 100);
+	aflDumpStack();
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "Variable200");
+	lua_pushinteger(L, 200);
+	aflDumpStack();
+	lua_settable(L, -3);
+
+	lua_pushstring(L, "Variable300");
+	lua_pushinteger(L, 300);
+	aflDumpStack();
+	lua_settable(L, -3);
+
+	aflDumpStack();
+	lua_settable(L, -3);
+	lua_pop(L, 1);
+	aflDumpStack();
+}
+
 static void Bind()
 {
 	BindGlobalfuncs();
-	BindGlobalVariables();
 	BindNamespace();
 	BindMyClass();
 	BindVec4();
 	BindWin();
+	StoreGlobalVariables();
+	StoreVariablesIntoNamespace();
 }
 
 int main(int argc, char* argv[])
