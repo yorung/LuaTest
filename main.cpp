@@ -47,26 +47,20 @@ static void StoreVariablesIntoNamespace()
 {
 	aflDumpStack();
 	lua_pushglobaltable(L);
-	lua_pushstring(L, "TestNameSpace");
 	lua_newtable(L);
 
-	lua_pushstring(L, "Variable100");
 	lua_pushinteger(L, 100);
-	aflDumpStack();
-	lua_settable(L, -3);
+	lua_setfield(L, -2, "Variable100");
 
-	lua_pushstring(L, "Variable200");
 	lua_pushinteger(L, 200);
-	aflDumpStack();
-	lua_settable(L, -3);
+	lua_setfield(L, -2, "Variable200");
 
-	lua_pushstring(L, "Variable300");
 	lua_pushinteger(L, 300);
-	aflDumpStack();
-	lua_settable(L, -3);
+	lua_setfield(L, -2, "Variable300");
 
 	aflDumpStack();
-	lua_settable(L, -3);
+	lua_setfield(L, -2, "TestNameSpace");
+	aflDumpStack();
 	lua_pop(L, 1);
 	aflDumpStack();
 }
