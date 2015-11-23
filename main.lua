@@ -15,12 +15,18 @@ local function DumpGlobal()
 	DumpTable(_G)
 end
 
-print("main.lua executing...")
+local function DumpLoaded()
+	print("---Dump package.loaded")
+	DumpTable(package.loaded)
+	print("---")
+end
 
-dofile("bind_win.lua")
-dofile("mes_box.lua")
-dofile("my_class.lua")
-dofile("vec4.lua")
+DumpLoaded()
+require "bind_win"
+require "mes_box"
+require "my_class"
+require "vec4"
+DumpLoaded()
 
 print("---------------_G")
 DumpTable(_G)
