@@ -1,4 +1,4 @@
-#include "af_lua_helpers.h"
+#include "stdafx.h"
 
 #include <new>
 

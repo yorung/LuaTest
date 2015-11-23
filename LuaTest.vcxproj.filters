@@ -186,6 +186,7 @@
     </ClInclude>
     <ClInclude Include="af_lua_helpers.h" />
     <ClInclude Include="af_math.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="main.lua" />

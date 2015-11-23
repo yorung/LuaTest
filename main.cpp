@@ -1,5 +1,4 @@
-#include "af_lua_helpers.h"
-#include <windows.h>
+#include "stdafx.h"
 
 lua_State *L;
 

@@ -1,8 +1,4 @@
-#include <windows.h>
-#include <algorithm>
-#include <string.h>
-
-#include "af_lua_helpers.h"
+#include "stdafx.h"
 
 extern lua_State *L;
 

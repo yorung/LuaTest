@@ -1,31 +1,31 @@
-#include "af_lua_helpers.h"
+#include "stdafx.h"
 
 void _aflDumpStack(lua_State* L, const char* func, int line)
 {
 	int top = lua_gettop(L);
-	printf("(%s,%d) top=%d\n", func, line, top);
+	aflog("(%s,%d) top=%d\n", func, line, top);
 	for (int i = 0; i < top; i++) {
 		int positive = top - i;
 		int negative = -(i + 1);
 		int type = lua_type(L, positive);
 		int typeN = lua_type(L, negative);
 		assert(type == typeN);
-		const char* typeName = lua_typename(L, type);
-		printf("%d/%d: type=%s", positive, negative, typeName);
+		char buf[48] = "";
 		switch (type) {
 		case LUA_TNUMBER:
-			printf(" value=%f", lua_tonumber(L, positive));
+			snprintf(buf, sizeof(buf), "%f", lua_tonumber(L, positive));
 			break;
 		case LUA_TSTRING:
-			printf(" value=%s", lua_tostring(L, positive));
+			snprintf(buf, sizeof(buf), "%s", lua_tostring(L, positive));
 			break;
 		case LUA_TFUNCTION:
 			if (lua_iscfunction(L, positive)) {
-				printf(" C:%p", lua_tocfunction(L, positive));
+				snprintf(buf, sizeof(buf), "C:%p", lua_tocfunction(L, positive));
 			}
 			break;
 		}
-		printf("\n");
+		const char* typeName = lua_typename(L, type);
+		aflog("%d/%d: type=%s value=%s\n", positive, negative, typeName, buf);
 	}
 }
 
@@ -85,3 +85,52 @@ void aflBindNamespace(lua_State* L, const char* nameSpace, luaL_Reg funcs[])
 	lua_pop(L, 1);
 	aflDumpStack();
 }
+
+#if 0
+
+bool aflDoFile(lua_State* L, const char* fileName)
+{
+	char* img = (char*)LoadFile(fileName);
+	if (!img) {
+		aflog("aflDoFile: could not load file %s\n", fileName);
+		return false;
+	}
+	bool ok = true;
+	if (luaL_loadbuffer(L, img, strlen(img), fileName)) {
+		aflog("luaL_loadbuffer failed!\n%s\n", lua_tostring(L, -1));
+		lua_pop(L, 1);
+		ok = false;
+	}
+	free(img);
+	if (ok && lua_pcall(L, 0, LUA_MULTRET, 0)) {
+		aflog("lua_pcall failed!\n%s\n", lua_tostring(L, -1));
+		lua_pop(L, 1);
+		ok = false;
+	}
+	return ok;
+}
+
+int aflDoFileForReplace(lua_State* L)
+{
+	const char* fileName = lua_tostring(L, -1);
+	char* img = (char*)LoadFile(fileName);
+	if (!img) {
+		luaL_error(L, "aflDoFile: could not load file %s", fileName);
+		return false;
+	}
+	bool ok = true;
+	if (luaL_loadbuffer(L, img, strlen(img), fileName)) {
+		luaL_error(L, "luaL_loadbuffer failed!\n%s", lua_tostring(L, -1));
+		lua_pop(L, 1);
+		ok = false;
+	}
+	free(img);
+	if (ok && lua_pcall(L, 0, LUA_MULTRET, 0)) {
+		luaL_error(L, "lua_pcall failed!\n%s", lua_tostring(L, -1));
+		lua_pop(L, 1);
+		ok = false;
+	}
+	return lua_gettop(L) - 1;
+}
+
+#endif
