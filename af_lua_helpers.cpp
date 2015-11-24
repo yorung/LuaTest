@@ -115,7 +115,30 @@ int aflDoFileForReplace(lua_State* L)
 	const char* fileName = lua_tostring(L, -1);
 	char* img = (char*)LoadFile(fileName);
 	if (!img) {
-		luaL_error(L, "aflDoFile: could not load file %s", fileName);
+		luaL_error(L, "aflDoFileForReplace: could not load file %s", fileName);
+		return false;
+	}
+	bool ok = true;
+	if (luaL_loadbuffer(L, img, strlen(img), fileName)) {
+		luaL_error(L, "luaL_loadbuffer failed!\n%s", lua_tostring(L, -1));
+		lua_pop(L, 1);
+		ok = false;
+	}
+	free(img);
+	if (ok && lua_pcall(L, 0, LUA_MULTRET, 0)) {
+		luaL_error(L, "lua_pcall failed!\n%s", lua_tostring(L, -1));
+		lua_pop(L, 1);
+		ok = false;
+	}
+	return lua_gettop(L) - 1;
+}
+
+int aflRequireForReplace(lua_State* L)
+{
+	const char* fileName = lua_tostring(L, -1);
+	char* img = (char*)LoadFile((std::string(fileName) + ".lua").c_str());
+	if (!img) {
+		luaL_error(L, "aflRequireForReplace: could not load file %s", fileName);
 		return false;
 	}
 	bool ok = true;

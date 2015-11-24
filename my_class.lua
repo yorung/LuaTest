@@ -1,15 +1,17 @@
 print("---------------MyClass instance creation")
 local obj = MyClass()
-
-print("---------------obj's metatable")
-local m = getmetatable(obj)
-for k,v in pairs(m) do
-	print(k, v)
-end
-
-print("---------------methods")
-
 obj:SetValue(1234)
-print("My value is", obj:GetValue())
+
+local function Debug()
+	print("---------------obj's metatable")
+	local m = getmetatable(obj)
+	for k,v in pairs(m) do
+		print(k, v)
+	end
+
+	print("---------------methods")
+	print("My value is", obj:GetValue())
+end
+--Debug()
 
 return obj

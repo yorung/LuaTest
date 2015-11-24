@@ -74,6 +74,7 @@ static void Bind()
 	StoreGlobalVariables();
 	StoreVariablesIntoNamespace();
 	lua_register(L, "dofile", aflDoFileForReplace);
+	lua_register(L, "require", aflRequireForReplace);
 }
 
 int main(int argc, char* argv[])

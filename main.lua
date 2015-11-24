@@ -22,7 +22,7 @@ end
 
 DumpLoaded()
 require "bind_win"
-require "mes_box"
+--require "mes_box"
 require "vec4"
 local obj1 = require("my_class")
 obj1:SetValue(5678)
@@ -35,8 +35,8 @@ DumpLoaded()
 
 print("--------------------------Dump package.searchers")
 DumpTable(package.searchers)
-
 print("---------------_G")
 DumpTable(_G)
 print("---------------TestNameSpace")
 DumpTable(TestNameSpace)
+print("---------------End of main.lua")
