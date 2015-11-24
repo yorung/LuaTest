@@ -73,6 +73,7 @@ static void Bind()
 	BindWin();
 	StoreGlobalVariables();
 	StoreVariablesIntoNamespace();
+	lua_register(L, "dofile", aflDoFileForReplace);
 }
 
 int main(int argc, char* argv[])

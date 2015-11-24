@@ -11,3 +11,5 @@ print("---------------methods")
 
 obj:SetValue(1234)
 print("My value is", obj:GetValue())
+
+return obj

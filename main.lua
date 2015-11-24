@@ -16,17 +16,20 @@ local function DumpGlobal()
 end
 
 local function DumpLoaded()
-	print("---Dump package.loaded")
+	print("--------------------------Dump package.loaded")
 	DumpTable(package.loaded)
-	print("---")
 end
 
 DumpLoaded()
 require "bind_win"
 require "mes_box"
-require "my_class"
 require "vec4"
+local obj = dofile("my_class.lua")
+print("Get my value from main.lua", obj:GetValue())
 DumpLoaded()
+
+print("--------------------------Dump package.searchers")
+DumpTable(package.searchers)
 
 print("---------------_G")
 DumpTable(_G)

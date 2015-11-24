@@ -110,6 +110,7 @@
     <ClCompile Include="af_lua_helpers.cpp" />
     <ClCompile Include="vec4.cpp" />
     <ClCompile Include="bind_win.cpp" />
+    <ClCompile Include="helper_win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lua\src\lapi.h">

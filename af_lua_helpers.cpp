@@ -86,7 +86,7 @@ void aflBindNamespace(lua_State* L, const char* nameSpace, luaL_Reg funcs[])
 	aflDumpStack();
 }
 
-#if 0
+void *LoadFile(const char *fileName, int* size = nullptr);
 
 bool aflDoFile(lua_State* L, const char* fileName)
 {
@@ -132,5 +132,3 @@ int aflDoFileForReplace(lua_State* L)
 	}
 	return lua_gettop(L) - 1;
 }
-
-#endif
