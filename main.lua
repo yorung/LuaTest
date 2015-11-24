@@ -24,13 +24,13 @@ DumpLoaded()
 require "bind_win"
 --require "mes_box"
 require "vec4"
-local obj1 = require("my_class")
+local obj1, msg1 = require("my_class")
 obj1:SetValue(5678)
-local obj2 = require("my_class")
-local obj3 = dofile("my_class.lua")
-print("Get my value of obj1 from main.lua", obj1:GetValue())
-print("Get my value of obj2 from main.lua", obj2:GetValue())
-print("Get my value of obj3 from main.lua", obj3:GetValue())
+local obj2, msg2 = require("my_class")
+local obj3, msg3 = dofile("my_class.lua")
+print("value of obj1 from main.lua", obj1:GetValue(), msg1)
+print("value of obj2 from main.lua", obj2:GetValue(), msg2)
+print("value of obj3 from main.lua", obj3:GetValue(), msg3)
 DumpLoaded()
 
 print("--------------------------Dump package.searchers")

@@ -14,4 +14,4 @@ local function Debug()
 end
 --Debug()
 
-return obj
+return obj, "a hidden message from my_class.lua"
