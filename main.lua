@@ -20,6 +20,10 @@ local function DumpLoaded()
 	DumpTable(package.loaded)
 end
 
+function require(m)
+	return dofile(m..".lua")
+end
+
 DumpLoaded()
 require "bind_win"
 --require "mes_box"
