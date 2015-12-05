@@ -31,6 +31,10 @@ function require(m)
 	return package.loaded[m]
 end
 
+print("---------------dofile and require")
+print("calling with dofile", dofile("random.lua"), dofile("random.lua"), dofile("random.lua"))
+print("calling with require", require("random"), require("random"), require("random"))
+assert(require("random") == package.loaded["random"])
 DumpLoaded()
 require "bind_win"
 --require "mes_box"
