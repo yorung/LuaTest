@@ -20,8 +20,15 @@ local function DumpLoaded()
 	DumpTable(package.loaded)
 end
 
+local function PrintModules()
+	print("------------------modules")
+	print("math", math)
+	print("debug", debug)
+end
+
 function require(m)
-	return dofile(m..".lua")
+	package.loaded[m] = package.loaded[m] or dofile(m..".lua") or true
+	return package.loaded[m]
 end
 
 DumpLoaded()
@@ -36,7 +43,7 @@ print("value of obj1 from main.lua", obj1:GetValue(), msg1)
 print("value of obj2 from main.lua", obj2:GetValue(), msg2)
 print("value of obj3 from main.lua", obj3:GetValue(), msg3)
 DumpLoaded()
-
+PrintModules()
 print("--------------------------Dump package.searchers")
 DumpTable(package.searchers)
 print("---------------_G")
